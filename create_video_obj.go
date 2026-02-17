@@ -41,7 +41,7 @@ func (c *Client) CreateVideoObject(ctx context.Context, title string, opts ...Vi
 	body := make(map[string]string, 1)
 
 	if strings.TrimSpace(title) == "" {
-		return nil, ErrTitileRequired
+		return nil, ErrTitleRequired
 	}
 	body["title"] = title
 

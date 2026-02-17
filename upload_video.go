@@ -7,22 +7,22 @@ import (
 	"strings"
 )
 
-type resolution string
-type outputCodex string
+type Resolution string
+type OutputCodex string
 
 const (
-	Res240p  resolution = "240p"
-	Res360p  resolution = "360p"
-	Res480p  resolution = "480p"
-	Res720p  resolution = "720p"
-	Res1080p resolution = "1080p"
-	Res1440p resolution = "1440p"
-	Res2160p resolution = "2160p"
+	Res240p  Resolution = "240p"
+	Res360p  Resolution = "360p"
+	Res480p  Resolution = "480p"
+	Res720p  Resolution = "720p"
+	Res1080p Resolution = "1080p"
+	Res1440p Resolution = "1440p"
+	Res2160p Resolution = "2160p"
 )
 
 const (
-	Codec_x264 outputCodex = "x264"
-	Codec_vp9  outputCodex = "vp9"
+	Codec_x264 OutputCodex = "x264"
+	Codec_vp9  OutputCodex = "vp9"
 )
 
 type UploadVideoOptions struct {
@@ -46,7 +46,7 @@ func JITEnabled(v bool) UploadVideoOption {
 	}
 }
 
-func EnabledResolutions(resolutions ...resolution) UploadVideoOption {
+func EnabledResolutions(resolutions ...Resolution) UploadVideoOption {
 	return func(o *UploadVideoOptions) {
 		for _, res := range resolutions {
 			o.enabledResolution = append(o.enabledResolution, string(res))
@@ -54,7 +54,7 @@ func EnabledResolutions(resolutions ...resolution) UploadVideoOption {
 	}
 }
 
-func EnabledOutputCodexs(codexes ...outputCodex) UploadVideoOption {
+func EnabledOutputCodexs(codexes ...OutputCodex) UploadVideoOption {
 	return func(o *UploadVideoOptions) {
 		for _, codex := range codexes {
 			o.enabledOutputCodecs = append(o.enabledOutputCodecs, string(codex))

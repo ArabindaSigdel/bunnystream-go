@@ -20,6 +20,7 @@ var (
 	ErrServiceUnavailable = errors.New("service unavailable")
 	ErrTitleRequired      = errors.New("title is required")
 	ErrVideoIDRequired    = errors.New("video id is required")
+	ErrResolutionRequired = errors.New("resolution is required")
 )
 
 // APIError represents an error response from the Bunny Stream API.
