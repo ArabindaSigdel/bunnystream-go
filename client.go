@@ -97,6 +97,8 @@ func (c *Client) checkResponseError(statusCode int, body []byte) error {
 		return ErrInternalServer
 	case http.StatusServiceUnavailable:
 		return ErrServiceUnavailable
+	case http.StatusForbidden:
+		return ErrForbidden
 	default:
 		return newAPIError(statusCode, body)
 	}

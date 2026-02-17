@@ -21,6 +21,7 @@ var (
 	ErrTitleRequired      = errors.New("title is required")
 	ErrVideoIDRequired    = errors.New("video id is required")
 	ErrResolutionRequired = errors.New("resolution is required")
+	ErrForbidden          = errors.New("forbidden - insufficient permissions or invalid token")
 )
 
 // APIError represents an error response from the Bunny Stream API.
