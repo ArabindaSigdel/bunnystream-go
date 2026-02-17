@@ -4,7 +4,6 @@ import (
 	"context"
 	"io"
 	"net/http"
-	"strconv"
 	"strings"
 )
 
@@ -129,47 +128,60 @@ func (c *Client) UploadVideo(ctx context.Context, videoId string, videoFile io.R
 		return nil, err
 	}
 
-	query := req.URL.Query()
+	// query := req.URL.Query()
 
-	if options.jitEnabled != nil {
-		query.Set("jitEnabled", strconv.FormatBool(*options.jitEnabled))
-	}
+	// if options.jitEnabled != nil {
+	// 	query.Set("jitEnabled", strconv.FormatBool(*options.jitEnabled))
+	// }
+	//
+	// if options.enabledResolution != nil {
+	// 	query.Set("enabledResolutions", strings.Join(options.enabledResolution, ","))
+	// }
+	//
+	// if options.enabledOutputCodecs != nil {
+	// 	query.Set("enabledOutputCodecs", strings.Join(options.enabledOutputCodecs, ","))
+	// }
+	//
+	// if options.transcribeEnabled != nil {
+	// 	query.Set("transcribeEnabled", strconv.FormatBool(*options.transcribeEnabled))
+	// }
+	//
+	// if options.transcribeLanguage != nil {
+	// 	query.Set("transcribeLanguages", strings.Join(options.transcribeLanguage, ","))
+	// }
+	//
+	// if options.sourceLanguage != "" {
+	// 	query.Set("sourceLanguage", options.sourceLanguage)
+	// }
+	//
+	// if options.generateTitle != nil {
+	// 	query.Set("generateTitle", strconv.FormatBool(*options.generateTitle))
+	// }
 
-	if options.enabledResolution != nil {
-		query.Set("enabledResolutions", strings.Join(options.enabledResolution, ","))
-	}
+	// if options.genereateDesc != nil {
+	// 	query.Set("generateDescription", strconv.FormatBool(*options.genereateDesc))
+	// }
+	//
+	// if options.generateChapter != nil {
+	// 	query.Set("generateChapters", strconv.FormatBool(*options.generateChapter))
+	// }
+	//
+	// if options.generateMoments != nil {
+	// 	query.Set("generateMoments", strconv.FormatBool(*options.generateMoments))
+	// }
 
-	if options.enabledOutputCodecs != nil {
-		query.Set("enabledOutputCodecs", strings.Join(options.enabledOutputCodecs, ","))
-	}
-
-	if options.transcribeEnabled != nil {
-		query.Set("transcribeEnabled", strconv.FormatBool(*options.transcribeEnabled))
-	}
-
-	if options.transcribeLanguage != nil {
-		query.Set("transcribeLanguages", strings.Join(options.transcribeLanguage, ","))
-	}
-
-	if options.sourceLanguage != "" {
-		query.Set("sourceLanguage", options.sourceLanguage)
-	}
-
-	if options.generateTitle != nil {
-		query.Set("generateTitle", strconv.FormatBool(*options.generateTitle))
-	}
-
-	if options.genereateDesc != nil {
-		query.Set("generateDescription", strconv.FormatBool(*options.genereateDesc))
-	}
-
-	if options.generateChapter != nil {
-		query.Set("generateChapters", strconv.FormatBool(*options.generateChapter))
-	}
-
-	if options.generateMoments != nil {
-		query.Set("generateMoments", strconv.FormatBool(*options.generateMoments))
-	}
+	buildQuery(req).
+		setBool("jitEnabled", options.jitEnabled).
+		setStrings("enabledResolutions", options.enabledResolution).
+		setStrings("enabledOutputCodecs", options.enabledOutputCodecs).
+		setBool("transcribeEnabled", options.transcribeEnabled).
+		setStrings("transcribeLanguages", options.transcribeLanguage).
+		setString("sourceLanguage", options.sourceLanguage).
+		setBool("generateTitle", options.generateTitle).
+		setBool("generateDescription", options.genereateDesc).
+		setBool("generateChapters", options.generateChapter).
+		setBool("generateMoments", options.generateMoments).
+		apply()
 
 	resp, err := c.doRequest(req)
 	if err != nil {
