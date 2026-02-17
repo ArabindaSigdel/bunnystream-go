@@ -18,7 +18,7 @@ var (
 	ErrBadRequest         = errors.New("bad request - check your input")
 	ErrInternalServer     = errors.New("internal server error")
 	ErrServiceUnavailable = errors.New("service unavailable")
-	ErrTitileRequired     = errors.New("title is required")
+	ErrTitleRequired      = errors.New("title is required")
 	ErrVideoIDRequired    = errors.New("video id is required")
 )
 
