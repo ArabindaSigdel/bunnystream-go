@@ -121,7 +121,7 @@ func (c *Client) PreviewAnimationURL(videoID string) (string, error) {
 // Requires CDNHostname to be set in Config.
 //
 //	https://vz-abc123.b-cdn.net/video-guid/play_720p.mp4
-func (c *Client) MP4URL(videoID string, r resolution) (string, error) {
+func (c *Client) MP4URL(videoID string, r Resolution) (string, error) {
 	if strings.TrimSpace(videoID) == "" {
 		return "", ErrVideoIDRequired
 	}

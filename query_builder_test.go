@@ -65,7 +65,7 @@ func TestBuildQuery_DoesNotMutateRequestBeforeapply(t *testing.T) {
 // setBool
 // -----------------------------------------------------------------------------
 
-func TestsetBool(t *testing.T) {
+func TestSetBool(t *testing.T) {
 	tests := []struct {
 		name      string
 		input     *bool
@@ -111,7 +111,7 @@ func TestsetBool(t *testing.T) {
 // setString
 // -----------------------------------------------------------------------------
 
-func TestsetString(t *testing.T) {
+func TestSetString(t *testing.T) {
 	tests := []struct {
 		name    string
 		input   string
@@ -164,7 +164,7 @@ func TestsetString(t *testing.T) {
 // setStrings
 // -----------------------------------------------------------------------------
 
-func TestsetStrings(t *testing.T) {
+func TestSetStrings(t *testing.T) {
 	tests := []struct {
 		name      string
 		input     []string
@@ -215,7 +215,7 @@ func TestsetStrings(t *testing.T) {
 // apply
 // -----------------------------------------------------------------------------
 
-func Testapply_WritesQueryToRequest(t *testing.T) {
+func TestApply_WritesQueryToRequest(t *testing.T) {
 	req := mustNewRequest(t)
 	buildQuery(req).setString("key", "value").apply()
 
@@ -224,7 +224,7 @@ func Testapply_WritesQueryToRequest(t *testing.T) {
 	}
 }
 
-func Testapply_PreservesExistingQueryParams(t *testing.T) {
+func TestApply_PreservesExistingQueryParams(t *testing.T) {
 	existing := url.Values{"page": []string{"2"}}
 	req := mustNewRequestWithQuery(t, existing)
 
@@ -239,7 +239,7 @@ func Testapply_PreservesExistingQueryParams(t *testing.T) {
 	}
 }
 
-func Testapply_OverwritesExistingParamWithSameKey(t *testing.T) {
+func TestApply_OverwritesExistingParamWithSameKey(t *testing.T) {
 	existing := url.Values{"lang": []string{"fr"}}
 	req := mustNewRequestWithQuery(t, existing)
 
@@ -251,7 +251,7 @@ func Testapply_OverwritesExistingParamWithSameKey(t *testing.T) {
 	}
 }
 
-func Testapply_IsIdempotent(t *testing.T) {
+func TestApply_IsIdempotent(t *testing.T) {
 	req := mustNewRequest(t)
 	qb := buildQuery(req).setString("lang", "en")
 

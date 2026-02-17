@@ -151,7 +151,7 @@ func (c *Client) SignedHLSURL(videoID string, ttl time.Duration, opts ...SignedU
 // Get the token key from: Pull Zone → Security → Token Authentication Key.
 //
 //	https://vz-abc.b-cdn.net/video-guid/play_720p.mp4?token=TOKEN&expires=EXP
-func (c *Client) SignedMP4URL(videoID string, r resolution, ttl time.Duration, opts ...SignedURLOption) (string, error) {
+func (c *Client) SignedMP4URL(videoID string, r Resolution, ttl time.Duration, opts ...SignedURLOption) (string, error) {
 	if strings.TrimSpace(videoID) == "" {
 		return "", ErrVideoIDRequired
 	}

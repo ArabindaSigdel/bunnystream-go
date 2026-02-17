@@ -36,7 +36,7 @@ func WithThumbnailTime(time string) VideoOption {
 // Returns a Response pointer containing the server's metadata or an Error
 // if the title is empty.
 func (c *Client) CreateVideoObject(ctx context.Context, title string, opts ...VideoOption) (*Response, error) {
-	url := c.buildURL("/library/%v/videos", c.libraryID)
+	endpoint := c.buildURL("/library/%v/videos", c.libraryID)
 
 	body := make(map[string]string, 1)
 
@@ -64,7 +64,7 @@ func (c *Client) CreateVideoObject(ctx context.Context, title string, opts ...Vi
 		return nil, err
 	}
 
-	req, err := c.request(ctx, http.MethodPost, url, bodyBuf, "application/json")
+	req, err := c.request(ctx, http.MethodPost, endpoint, bodyBuf, "application/json")
 	if err != nil {
 		return nil, err
 	}
