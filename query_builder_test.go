@@ -12,8 +12,6 @@ import (
 // -----------------------------------------------------------------------------
 
 // mustNewRequest creates a GET request for use in tests.
-// It calls t.Fatal if the request cannot be created — this should never happen
-// in practice since the URL is a hard-coded constant.
 func mustNewRequest(t *testing.T) *http.Request {
 	t.Helper()
 	req, err := http.NewRequest(http.MethodGet, "https://video.bunnycdn.com/library/123/videos", nil)
@@ -31,7 +29,7 @@ func mustNewRequestWithQuery(t *testing.T, existing url.Values) *http.Request {
 	return req
 }
 
-// boolPtr returns a pointer to a bool. Avoids the &true syntax which Go doesn't allow.
+// boolPtr returns a pointer to a bool.
 func boolPtr(v bool) *bool { return &v }
 
 // -----------------------------------------------------------------------------
@@ -45,11 +43,10 @@ func TestBuildQuery_ReturnsNonNilBuilder(t *testing.T) {
 	}
 }
 
-func TestBuildQuery_DoesNotMutateRequestBeforeapply(t *testing.T) {
+func TestBuildQuery_DoesNotMutateRequestBeforeApply(t *testing.T) {
 	req := mustNewRequest(t)
 	originalQuery := req.URL.RawQuery
 
-	// Build params but intentionally do NOT call apply.
 	buildQuery(req).
 		setBool("jitEnabled", boolPtr(true)).
 		setString("sourceLanguage", "en").
@@ -69,25 +66,25 @@ func TestSetBool(t *testing.T) {
 	tests := []struct {
 		name      string
 		input     *bool
-		wantset   bool
+		wantSet   bool
 		wantValue string
 	}{
 		{
 			name:      "true sets param to 'true'",
 			input:     boolPtr(true),
-			wantset:   true,
+			wantSet:   true,
 			wantValue: "true",
 		},
 		{
 			name:      "false sets param to 'false'",
 			input:     boolPtr(false),
-			wantset:   true,
+			wantSet:   true,
 			wantValue: "false",
 		},
 		{
 			name:    "nil pointer omits param entirely",
 			input:   nil,
-			wantset: false,
+			wantSet: false,
 		},
 	}
 
@@ -97,10 +94,10 @@ func TestSetBool(t *testing.T) {
 			buildQuery(req).setBool("flag", tt.input).apply()
 
 			got := req.URL.Query().Get("flag")
-			if tt.wantset && got != tt.wantValue {
+			if tt.wantSet && got != tt.wantValue {
 				t.Errorf("flag = %q, want %q", got, tt.wantValue)
 			}
-			if !tt.wantset && got != "" {
+			if !tt.wantSet && got != "" {
 				t.Errorf("expected flag to be absent, got %q", got)
 			}
 		})
@@ -115,33 +112,13 @@ func TestSetString(t *testing.T) {
 	tests := []struct {
 		name    string
 		input   string
-		wantset bool
+		wantSet bool
 	}{
-		{
-			name:    "non-empty string sets param",
-			input:   "en",
-			wantset: true,
-		},
-		{
-			name:    "empty string omits param",
-			input:   "",
-			wantset: false,
-		},
-		{
-			name:    "whitespace-only omits param",
-			input:   "   ",
-			wantset: false,
-		},
-		{
-			name:    "tab-only omits param",
-			input:   "\t",
-			wantset: false,
-		},
-		{
-			name:    "string with internal spaces is preserved",
-			input:   "en US",
-			wantset: true,
-		},
+		{name: "non-empty string sets param", input: "en", wantSet: true},
+		{name: "empty string omits param", input: "", wantSet: false},
+		{name: "whitespace-only omits param", input: "   ", wantSet: false},
+		{name: "tab-only omits param", input: "\t", wantSet: false},
+		{name: "string with internal spaces is preserved", input: "en US", wantSet: true},
 	}
 
 	for _, tt := range tests {
@@ -150,10 +127,10 @@ func TestSetString(t *testing.T) {
 			buildQuery(req).setString("lang", tt.input).apply()
 
 			got := req.URL.Query().Get("lang")
-			if tt.wantset && got != tt.input {
+			if tt.wantSet && got != tt.input {
 				t.Errorf("lang = %q, want %q", got, tt.input)
 			}
-			if !tt.wantset && got != "" {
+			if !tt.wantSet && got != "" {
 				t.Errorf("expected lang to be absent, got %q", got)
 			}
 		})
@@ -168,31 +145,13 @@ func TestSetStrings(t *testing.T) {
 	tests := []struct {
 		name      string
 		input     []string
-		wantset   bool
+		wantSet   bool
 		wantValue string
 	}{
-		{
-			name:      "single value",
-			input:     []string{"720p"},
-			wantset:   true,
-			wantValue: "720p",
-		},
-		{
-			name:      "multiple values joined with comma",
-			input:     []string{"480p", "720p", "1080p"},
-			wantset:   true,
-			wantValue: "480p,720p,1080p",
-		},
-		{
-			name:    "nil slice omits param",
-			input:   nil,
-			wantset: false,
-		},
-		{
-			name:    "empty slice omits param",
-			input:   []string{},
-			wantset: false,
-		},
+		{name: "single value", input: []string{"720p"}, wantSet: true, wantValue: "720p"},
+		{name: "multiple values joined with comma", input: []string{"480p", "720p", "1080p"}, wantSet: true, wantValue: "480p,720p,1080p"},
+		{name: "nil slice omits param", input: nil, wantSet: false},
+		{name: "empty slice omits param", input: []string{}, wantSet: false},
 	}
 
 	for _, tt := range tests {
@@ -201,10 +160,10 @@ func TestSetStrings(t *testing.T) {
 			buildQuery(req).setStrings("resolutions", tt.input).apply()
 
 			got := req.URL.Query().Get("resolutions")
-			if tt.wantset && got != tt.wantValue {
+			if tt.wantSet && got != tt.wantValue {
 				t.Errorf("resolutions = %q, want %q", got, tt.wantValue)
 			}
-			if !tt.wantset && got != "" {
+			if !tt.wantSet && got != "" {
 				t.Errorf("expected resolutions to be absent, got %q", got)
 			}
 		})
@@ -268,7 +227,7 @@ func TestApply_IsIdempotent(t *testing.T) {
 // Chaining
 // -----------------------------------------------------------------------------
 
-func TestChaining_AllsettersTogether(t *testing.T) {
+func TestChaining_AllSettersTogether(t *testing.T) {
 	req := mustNewRequest(t)
 
 	buildQuery(req).
@@ -315,8 +274,6 @@ func TestChaining_NilAndEmptyValuesAreSkipped(t *testing.T) {
 // Benchmarks
 // -----------------------------------------------------------------------------
 
-// BenchmarkBuildQuery_FullChain measures the overhead of building and applying
-// a realistic set of query params — representative of an UploadVideo call.
 func BenchmarkBuildQuery_FullChain(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		req, _ := http.NewRequest(http.MethodPut, "https://video.bunnycdn.com/library/123/videos/abc", nil)
@@ -336,10 +293,11 @@ func BenchmarkBuildQuery_FullChain(b *testing.B) {
 }
 
 // -----------------------------------------------------------------------------
-// Examples — rendered as runnable code on pkg.go.dev
+// Examples
+// — named as package-level examples since queryBuilder is unexported
 // -----------------------------------------------------------------------------
 
-func ExampleQueryBuilder_basic() {
+func Example_buildQueryBasic() {
 	req, _ := http.NewRequest(http.MethodPut, "https://video.bunnycdn.com/library/123/videos/abc", nil)
 
 	jit := true
@@ -353,13 +311,13 @@ func ExampleQueryBuilder_basic() {
 	// Output: enabledResolutions=720p%2C1080p&jitEnabled=true&sourceLanguage=en
 }
 
-func ExampleQueryBuilder_nilAndEmptyValuesAreIgnored() {
+func Example_buildQueryNilAndEmptyValuesAreIgnored() {
 	req, _ := http.NewRequest(http.MethodPut, "https://video.bunnycdn.com/library/123/videos/abc", nil)
 
 	buildQuery(req).
-		setBool("jitEnabled", nil).      // nil pointer — skipped
-		setString("sourceLanguage", ""). // empty string — skipped
-		setStrings("resolutions", nil).  // nil slice — skipped
+		setBool("jitEnabled", nil).
+		setString("sourceLanguage", "").
+		setStrings("resolutions", nil).
 		apply()
 
 	fmt.Println(req.URL.RawQuery)
